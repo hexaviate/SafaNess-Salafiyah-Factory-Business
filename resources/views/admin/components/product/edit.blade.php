@@ -1,85 +1,146 @@
-@extends('admin.admin')
+@extends('admin.layout.app')
 @section('content')
-@if ($errors->any())
-<div class="alert border-0 border-start border-5 border-danger alert-dismissible fade show py-2">
-    <div class="d-flex align-items-center">
-        <div class="font-35 text-danger"><i class="bx bxs-message-square-x"></i>
-        </div>
-        <div class="ms-3">
-            <h6 class="mb-0 text-danger">Invalid</h6>
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{$error}}</li>
-                @endforeach
-            </ul>
-        </div>
+<!--breadcrumb-->
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+    <div class="breadcrumb-title pe-3">Product</div>
+    <div class="ps-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="bx bx-home-alt"></i></a></li>
+                <li class="breadcrumb-item"><a href="{{ route('product.index') }}">Product Table</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit Product</li>
+            </ol>
+        </nav>
     </div>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="ms-auto">
+        <a href="{{ route('product.index') }}" class="btn btn-light">
+            <i class="bx bx-arrow-back"></i> Back to Products
+        </a>
+    </div>
 </div>
-@endif
-<div class="card">
-    <div class="card-body p-4">
-        <h5 class="card-title">Add New Product</h5>
-        <hr />
-        <div class="form-body mt-4">
-            <form action="{{ route('product.update', $product->id)}}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="border border-3 p-4 rounded">
-                            <div class="mb-3">
-                                <label for="inputProductTitle" class="form-label">Product Title</label>
-                                <input type="text" name="name" value="{{ old('name', $product->name)}}"
-                                    class="form-control" id="inputProductTitle" placeholder="Enter product title">
-                            </div>
-                            <div class="mb-3">
-                                <label for="inputProductDescription" class="form-label">Description</label>
-                                <textarea class="form-control" name="description"
-                                    value="" id="inputProductDescription"
-                                    rows="3">{{old('description', $product->description)}}</textarea>
-                            </div>
-                            {{-- Show the old image --}}
-                            <div class="mb-3">
-                                <label for="inputProductDescription" class="form-label">Product Images</label>
-                                <input id="image-uploadify" type="file" name="product_img"
-                                    value="{{ old('product_img', $product->product_img)}}"
-                                    accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="border border-3 p-4 rounded">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="inputPrice" class="form-label">Price</label>
-                                    <input type="number" class="form-control" id="inputPrice" name="price"
-                                        value="{{ old('price', $product->price)}}" placeholder="00.00">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="stock" class="form-label">Stock</label>
-                                    <input type="number" id="stock" class="form-control" name="stock" placeholder="00"
-                                        value="{{ old('stock', $product->stock)}}">
-                                </div>
-                                <div class="col-12">
-                                    <label for="inputProductType" class="form-label">Product Type</label>
-                                    <select class="form-select" id="inputProductType" name="sub_categories_id">
-                                        @foreach ($data as $item)
-                                        <option value="{{$item->id}}">{{$item->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary">Save Product</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <!--end row-->
+<!--end breadcrumb-->
+
+<div class="card border-top border-0 border-4 border-primary">
+    <div class="card-body">
+        <div class="card-title d-flex align-items-center mb-4">
+            <div><i class="bx bxs-edit me-1 font-22 text-primary"></i></div>
+            <h5 class="mb-0 text-primary">Edit Product</h5>
         </div>
+        <hr>
+
+        <form action="{{ route('product.update', $product->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+
+            <div class="row">
+                <!-- Product Name -->
+                <div class="mb-3 col-lg-6">
+                    <label for="name" class="form-label">Product Name</label>
+                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                           id="name" name="name" placeholder="Product Name" value="{{ old('name', $product->name) }}" required />
+                    @error('name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Slug -->
+                <div class="mb-3 col-lg-6">
+                    <label for="slug" class="form-label">Slug</label>
+                    <input type="text" class="form-control @error('slug') is-invalid @enderror"
+                           id="slug" name="slug" placeholder="Slug" value="{{ old('slug', $product->slug) }}" readonly />
+                    @error('slug')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    <small class="form-text text-muted">Slug akan dibuat otomatis dari nama.</small>
+                </div>
+
+                <!-- Sub Category -->
+                <div class="mb-3 col-lg-6">
+                    <label for="sub_categories_id" class="form-label">Sub Category</label>
+                    <select class="form-select @error('sub_categories_id') is-invalid @enderror" id="sub_categories_id" name="sub_categories_id" required>
+                        @if(isset($data))
+                            @foreach ($data as $subCategory)
+                                <option value="{{ $subCategory->id }}" {{ old('sub_categories_id', $product->sub_categories_id) == $subCategory->id ? 'selected' : '' }}>
+                                    {{ $subCategory->name }}
+                                </option>
+                            @endforeach
+                        @endif
+                    </select>
+                    @error('sub_categories_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Weight -->
+                <div class="mb-3 col-lg-3">
+                    <label for="weight" class="form-label">Weight (gram)</label>
+                    <input type="number" class="form-control @error('weight') is-invalid @enderror"
+                           id="weight" name="weight" placeholder="e.g., 100" value="{{ old('weight', $product->weight) }}" required />
+                    @error('weight')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Stock -->
+                <div class="mb-3 col-lg-3">
+                    <label for="stock" class="form-label">Stock</label>
+                    <input type="number" class="form-control @error('stock') is-invalid @enderror"
+                           id="stock" name="stock" placeholder="e.g., 50" value="{{ old('stock', $product->stock) }}" required />
+                    @error('stock')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Price -->
+                <div class="mb-3 col-lg-6">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror"
+                           id="price" name="price" placeholder="e.g., 150000.00" value="{{ old('price', $product->price) }}" required />
+                    @error('price')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3 col-lg-12">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control @error('description') is-invalid @enderror"
+                              id="description" name="description" rows="5" placeholder="Product Description">{{ old('description', $product->description) }}</textarea>
+                    @error('description')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-lg-12 mt-4">
+                <button type="submit" class="btn btn-primary px-5">
+                    <i class="bx bx-save me-1"></i> Update Product
+                </button>
+                <a href="{{ route('product.index') }}" class="btn btn-secondary ms-2">
+                    <i class="bx bx-x-circle me-1"></i> Cancel
+                </a>
+            </div>
+        </form>
     </div>
-    @endsection
+</div>
+
+<!-- JavaScript for auto-generating slug from name -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const nameInput = document.getElementById('name');
+    const slugInput = document.getElementById('slug');
+
+    if (nameInput && slugInput) {
+        nameInput.addEventListener('input', function() {
+            let slug = this.value.toLowerCase()
+                .replace(/[^\w\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-');
+
+            slugInput.value = slug;
+        });
+    }
+});
+</script>
+@endsection

@@ -15,7 +15,8 @@ class ProductController
      */
     public function index()
     {
-        $data = Product::all();
+         $data = Product::paginate(10);
+        // $data = Product::all();
         return view('admin.components.product.index', compact('data'));
     }
 

@@ -11,7 +11,7 @@ use Inertia\Inertia;
 
 
 Route::get('/dashboard', function() {
-    return view('admin.admin');
+    return view('admin.components.dahboard.index');
 })->name('dashboard');
 
 Route::resource('category', WebCategoryController::class);
