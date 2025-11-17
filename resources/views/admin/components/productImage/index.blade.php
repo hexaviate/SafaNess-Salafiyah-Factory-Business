@@ -1,4 +1,4 @@
-@extends('admin.admin')
+@extends('admin.layout.app')
 @section('content')
 <!--breadcrumb-->
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -6,25 +6,14 @@
     <div class="ps-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 p-0">
-                <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
-                </li>
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="bx bx-home-alt"></i></a></li>
                 <li class="breadcrumb-item active" aria-current="page">Product Image Table</li>
             </ol>
         </nav>
     </div>
     <div class="ms-auto">
         <div class="btn-group">
-            <a class="btn btn-primary" href="{{ route('productImage.create')}}">Tambah Data</a>
-            <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split"
-                data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle Dropdown</span>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                {{-- <a class="dropdown-item" href="javascript:;">Action</a>
-                <a class="dropdown-item" href="javascript:;">Another action</a>
-                <a class="dropdown-item" href="javascript:;">Something else here</a>
-                <div class="dropdown-divider"></div> <a class="dropdown-item" href="javascript:;">Separated link</a>
-                --}}
-            </div>
+            <a class="btn btn-primary" href="{{ route('productImage.create') }}">Tambah Data</a>
         </div>
     </div>
 </div>
@@ -41,22 +30,23 @@
                         <th>Product</th>
                         <th>Image</th>
                         <th>Aksi</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach ($data as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->product->name }}</td>
-                        <td><img src="{{ asset('images/'.$item->image)}}" class="img-fluid"></td>
+                        <td><img src="{{ asset('images/'.$item->image) }}" class="img-fluid" style="max-width: 100px; max-height: 100px; object-fit: cover;"></td>
                         <td>
                             <form action="{{ route('productImage.destroy', $item->id)}}" method="POST">
                                 @csrf
                                 @method('delete')
                                 <div class="form-button-action">
                                     {{-- edit --}}
-                                    <a href="{{ route('productImage.edit', $item->id)}}" class="btn btn-outline-primary px-5 radius-30" >Edit</a>
+                                    <a href="{{ route('productImage.edit', $item->id)}}" class="btn btn-outline-primary px-5 radius-30">Edit</a>
                                     {{-- delete --}}
-                                    <button type="submit" class="btn btn-outline-danger px-5 radius-30">Hapus</button>
+                                    <button type="submit" class="btn btn-outline-danger px-5 radius-30" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?');">Hapus</button>
                                 </div>
                             </form>
                         </td>
@@ -75,5 +65,4 @@
         </div>
     </div>
 </div>
-
 @endsection

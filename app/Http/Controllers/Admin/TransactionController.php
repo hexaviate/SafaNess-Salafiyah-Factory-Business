@@ -14,7 +14,7 @@ class TransactionController
      */
     public function index()
     {
-        $data = Transaction::all();
+        $data = Transaction::paginate(10);
         return view('admin.components.transaction.index', compact('data'));
     }
 

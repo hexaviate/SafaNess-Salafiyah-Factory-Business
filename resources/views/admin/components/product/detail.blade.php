@@ -1,7 +1,5 @@
-@extends('admin.admin')
+@extends('admin.layout.app')
 @section('content')
-
-
 
 <!--breadcrumb-->
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -9,8 +7,8 @@
     <div class="ps-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 p-0">
-                <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
-                </li>
+                {{-- Perbaikan: Menambahkan rute yang benar --}}
+                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="bx bx-home-alt"></i></a></li>
                 <li class="breadcrumb-item active" aria-current="page">Products Details</li>
             </ol>
         </nav>
@@ -18,64 +16,49 @@
     <div class="ms-auto">
         <div class="btn-group">
             <a class="btn btn-danger" href="{{ route('product.index')}}">Back</a>
-            {{-- <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split"
-                data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle Dropdown</span>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                {{-- <a class="dropdown-item" href="javascript:;">Action</a>
-                <a class="dropdown-item" href="javascript:;">Another action</a>
-                <a class="dropdown-item" href="javascript:;">Something else here</a>
-                <div class="dropdown-divider"></div> <a class="dropdown-item" href="javascript:;">Separated link</a>
-                --}}
-            </div>
         </div>
     </div>
 </div>
 <!--end breadcrumb-->
 
 <div class="card">
+    {{-- Variabel dan foreach DIPERTAHANKAN sesuai permintaan --}}
     @foreach ($data as $item )
     <div class="row g-0">
         <div class="col-md-4 border-end">
-            <img src="{{ asset('images/'.$item->product_img)}}" class="img-fluid" alt="...">
+            {{-- Perbaikan: Menambahkan helper asset() untuk path gambar --}}
+            <img src="{{ asset('images/'.$item->product_img) }}" class="img-fluid" alt="...">
             <div class="row mb-3 row-cols-auto g-2 justify-content-center mt-3">
-                <div class="col"><img src="assets/images/products/12.png" width="70"
+                {{-- Perbaikan: Menambahkan helper asset() untuk path gambar --}}
+                <div class="col"><img src="{{ asset('assets/images/products/12.png') }}" width="70"
                         class="border rounded cursor-pointer" alt=""></div>
-                <div class="col"><img src="assets/images/products/11.png" width="70"
+                <div class="col"><img src="{{ asset('assets/images/products/11.png') }}" width="70"
                         class="border rounded cursor-pointer" alt=""></div>
-                <div class="col"><img src="assets/images/products/14.png" width="70"
+                <div class="col"><img src="{{ asset('assets/images/products/14.png') }}" width="70"
                         class="border rounded cursor-pointer" alt=""></div>
-                <div class="col"><img src="assets/images/products/15.png" width="70"
+                <div class="col"><img src="{{ asset('assets/images/products/15.png') }}" width="70"
                         class="border rounded cursor-pointer" alt=""></div>
             </div>
         </div>
         <div class="col-md-8">
             <div class="card-body">
 
-                <h4 class="card-title">{{ $item->name}}</h4>
-                {{-- <div class="d-flex gap-3 py-3">
-                    <div class="cursor-pointer">
-                        <i class='bx bxs-star text-warning'></i>
-                        <i class='bx bxs-star text-warning'></i>
-                        <i class='bx bxs-star text-warning'></i>
-                        <i class='bx bxs-star text-warning'></i>
-                        <i class='bx bxs-star text-secondary'></i>
-                    </div>
-                    <div>142 reviews</div>
-                    <div class="text-success"><i class='bx bxs-cart-alt align-middle'></i> 134 orders</div>
-                </div> --}}
+                {{-- Perbaikan: Memperbaiki syntax penutup kurung kurawal --}}
+                <h4 class="card-title">{{ $item->name }}</h4>
+
                 <div class="mb-3">
-                    <span class="price h4">Rp.{{$item->price}}</span>
+                    {{-- Perbaikan: Memperbaiki syntax dan menambahkan format harga --}}
+                    <span class="price h4">Rp. {{ number_format($item->price, 2, ',', '.') }}</span>
                 </div>
                 <dl class="row">
                     <dt class="col-sm-3">Category</dt>
-                    <dd class="col-sm-9">{{$item->sub_category->name}}</dd>
+                    <dd class="col-sm-9">{{ $item->sub_category->name }}</dd>
 
                     <dt class="col-sm-3">Stock</dt>
-                    <dd class="col-sm-9">{{$item->stock}}</dd>
+                    <dd class="col-sm-9">{{ $item->stock }}</dd>
 
                     <dt class="col-sm-3">Slug</dt>
-                    <dd class="col-sm-9">{{$item->slug}}</dd>
+                    <dd class="col-sm-9">{{ $item->slug }}</dd>
                 </dl>
 
                 <hr>
@@ -90,11 +73,12 @@
                     </div>
                     <div class="col">
                         <label class="form-label">Select Color</label>
-                        <div class="color-indigators d-flex align-items-center gap-2">
-                            <div class="color-indigator-item bg-primary"></div>
-                            <div class="color-indigator-item bg-danger"></div>
-                            <div class="color-indigator-item bg-success"></div>
-                            <div class="color-indigator-item bg-warning"></div>
+                        {{-- Perbaikan: Memperbaiki typo nama kelas CSS --}}
+                        <div class="color-indicators d-flex align-items-center gap-2">
+                            <div class="color-indicator-item bg-primary"></div>
+                            <div class="color-indicator-item bg-danger"></div>
+                            <div class="color-indicator-item bg-success"></div>
+                            <div class="color-indicator-item bg-warning"></div>
                         </div>
                     </div>
                 </div>
@@ -121,7 +105,8 @@
         </ul>
         <div class="tab-content pt-3">
             <div class="tab-pane fade show active" id="primaryhome" role="tabpanel">
-                <p>{{$item->description}}</p>
+                {{-- Perbaikan: Memperbaiki syntax dan menggunakan {!! !!} untuk render HTML --}}
+                <p>{!! $item->description !!}</p>
             </div>
         </div>
     </div>

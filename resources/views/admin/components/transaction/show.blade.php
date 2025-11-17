@@ -1,4 +1,4 @@
-@extends('admin.admin')
+@extends('admin.layout.app')
 @section('content')
 <!--breadcrumb-->
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -6,8 +6,7 @@
     <div class="ps-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0 p-0">
-                <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
-                </li>
+                <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a></li>
                 <li class="breadcrumb-item active" aria-current="page">Invoice</li>
             </ol>
         </nav>
@@ -18,8 +17,8 @@
             <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split"
                 data-bs-toggle="dropdown"> <span class="visually-hidden">Toggle Dropdown</span>
             </button>
-            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end"> <a class="dropdown-item"
-                    href="javascript:;">Action</a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
+                <a class="dropdown-item" href="javascript:;">Action</a>
                 <a class="dropdown-item" href="javascript:;">Another action</a>
                 <a class="dropdown-item" href="javascript:;">Something else here</a>
                 <div class="dropdown-divider"></div> <a class="dropdown-item" href="javascript:;">Separated link</a>
@@ -28,6 +27,7 @@
     </div>
 </div>
 <!--end breadcrumb-->
+
 <div class="card">
     <div class="card-body">
         <div id="invoice">
@@ -39,12 +39,12 @@
                 <hr />
             </div>
             <div class="invoice overflow-auto">
-                <div style="min-width: 600px">
+                <div style="min-width: 600px;">
                     <header>
                         <div class="row">
                             <div class="col">
                                 <a href="javascript:;">
-                                    <img src="{{ asset('assets/images/logo-icon.png')}}" width="80" alt="" />
+                                    <img src="{{ asset('assets/images/logo-icon.png') }}" width="80" alt="" />
                                 </a>
                             </div>
                             <div class="col company-details">
@@ -59,20 +59,18 @@
                             </div>
                         </div>
                     </header>
+                    @foreach ($data as $item)
                     <main>
-                        @foreach ($data as $item)
-
                         <div class="row contacts">
                             <div class="col invoice-to">
                                 <div class="text-gray-light">INVOICE TO:</div>
-                                <h2 class="to">{{$item->buyer->name}}</h2>
-                                <div class="address">{{$item->buyer->address}}</div>
-                                <div class="email">{{$item->buyer->phone}}</a>
-                                </div>
+                                <h2 class="to">{{ $item->buyer->name }}</h2>
+                                <div class="address">{{ $item->buyer->address }}</div>
+                                <div class="email">{{ $item->buyer->phone }}</a>
                             </div>
                             <div class="col invoice-details">
-                                <h1 class="invoice-id">INVOICE{{$item->id}}</h1>
-                                <div class="date">Date of Invoice: {{$item->created_at}}</div>
+                                <h1 class="invoice-id">INVOICE{{ $item->id }}</h1>
+                                <div class="date">Date of Invoice: {{ $item->created_at }}</div>
                             </div>
                         </div>
                         <table>
@@ -86,15 +84,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($detail as $item1)
+                                @foreach ($item->details as $detail)
                                 <tr>
-                                    <td class="no">{{$loop->iteration}}</td>
+                                    <td class="no">{{ $loop->parent->iteration }}</td>
                                     <td class="text-left">
-                                        <h3>{{$item1->cart->product->name}}</h3>{{$item1->cart->product->sub_category->name}}
+                                        <h3>{{ $detail->cart->product->name }}{{ $detail->cart->product->sub_category->name }}</h3>
                                     </td>
-                                    <td class="unit">Rp.{{$item1->cart->product->price}}</td>
-                                    <td class="qty">{{$item1->cart->qty}}</td>
-                                    <td class="total">Rp.{{$item1->cart->price_total}}</td>
+                                    <td class="unit">Rp.{{ $detail->cart->product->price }}</td>
+                                    <td class="qty">{{ $detail->cart->qty }}</td>
+                                    <td class="total">Rp.{{ $detail->cart->price_total }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -112,18 +110,17 @@
                                 <tr>
                                     <td colspan="2"></td>
                                     <td colspan="2">GRAND TOTAL</td>
-                                    <td>Rp.{{$item->payment_total}}</td>
+                                    <td>Rp.{{ $item->payment_total }}</td>
                                 </tr>
                             </tfoot>
                         </table>
                         <div class="thanks">Thank you!</div>
                         <div class="notices">
-                            <div>NOTICE:</div>
-                            <div class="notice">{{$item->information}}
-                            </div>
+                            <div class="notice">NOTICE:</div>
+                            <div>{{ $item->information }}</div>
                         </div>
-                        @endforeach
                     </main>
+                    @endforeach
                     <footer>Invoice was created on a computer and is valid without the signature and seal.</footer>
                 </div>
                 <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
