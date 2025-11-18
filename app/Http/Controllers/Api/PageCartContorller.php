@@ -59,7 +59,7 @@ class PageCartContorller
     {
         $user = auth('sanctum')->user();
 
-        $transaction = Transaction::with(['transactionDetail.cart'])->where('buyer_id', $user->id)->latest()->get();
+        $transaction = Transaction::with(['transactionDetail.cart'], 'courier')->where('buyer_id', $user->id)->latest()->get();
         $collection = TransactionResource::collection($transaction);
 
         return response()->json([
