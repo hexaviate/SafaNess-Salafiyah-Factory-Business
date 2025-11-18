@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class PageCartContorller
 {
 
-    public function infoCart()
+    public function infoCart(Request $request)
     {
         $user = auth('sanctum')->user();
 
