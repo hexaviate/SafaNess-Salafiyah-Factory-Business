@@ -50,5 +50,6 @@ Route::prefix('admin')->group(function () {
 
 Route::get('/search-destination', [RajaOngkirController::class, 'searchDestination'])->name('search-destination');
 Route::get('/infoCart', [PageCartContorller::class, 'infoCart'])->name('infoCart');
+Route::post('/infoCart2', [PageCartContorller::class, 'infoCart2'])->name('infoCart2');
 Route::get('/transactionInfo', [PageCartContorller::class, 'transactionInfo'])->name('transactionInfo');
 Route::get('/accountDetail', [AccountController::class, 'accountDetail'])->name('accountDetail');

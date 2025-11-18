@@ -89,7 +89,7 @@ class TransactionController
                     'origin' => '59154',
                     'destination' => $zipcode,
                     'weight' => $total_weight,
-                    'courier' => 'jnt'
+                    'courier' => $request->courier
                 ],
             ]);
 

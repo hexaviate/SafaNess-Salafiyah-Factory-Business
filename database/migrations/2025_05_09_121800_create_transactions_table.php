@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('buyer_id')->constrained()->onDelete('cascade');
             $table->enum('status', ['failed', 'pending', 'success', 'waiting'])->default('waiting');
-            $table->string('information');
+            $table->string('information')->nullable();
             $table->string('payment_proof')->nullable();
             $table->string('courier');
             $table->string('waybill_number')->nullable();
