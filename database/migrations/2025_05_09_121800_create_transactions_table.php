@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->enum('status', ['failed', 'pending', 'success', 'waiting'])->default('waiting');
             $table->string('information')->nullable();
             $table->string('payment_proof')->nullable();
-            $table->string('courier');
+            $table->string('courier')->nullable();
             $table->string('waybill_number')->nullable();
             $table->integer('subtotal');
             $table->integer('shipping_cost');

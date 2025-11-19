@@ -79,7 +79,7 @@ class PageCartContorller
         $result = json_decode($res->getbody(), true);
         $ongkir = $result['data']['0']['cost'];
         $total = $cart->sum('price_total');
-        $final = $total + $ongkir;
+        $final = $total + $ongkir + 1000;
 
         $data = [
             "name" => $user->username,
@@ -89,6 +89,7 @@ class PageCartContorller
             "zipcode" => $zipcode,
             "subtotal" => $total,
             "ongkir" => $ongkir,
+            "biaya_layanan" => 1000,
             "total" => $final
         ];
 
@@ -103,7 +104,21 @@ class PageCartContorller
     {
         $user = auth('sanctum')->user();
 
-        $transaction = Transaction::with(['transactionDetail.cart'], 'courier')->where('buyer_id', $user->id)->latest()->get();
+        $transaction = Transaction::with(['transactionDetail.cart'], 'couriers')->where('buyer_id', $user->id)->latest()->get();
+        $collection = TransactionResource::collection($transaction);
+
+        return response()->json([
+            "message" => "success",
+            "data" => $collection
+        ], 200);
+
+    }
+
+    public function detailTransactionInfo(string $id)
+    {
+        $user = auth('sanctum')->user();
+
+        $transaction = Transaction::with(['transactionDetail.cart'], 'courier')->where('id', $id)->get();
         $collection = TransactionResource::collection($transaction);
 
         return response()->json([
